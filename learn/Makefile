@@ -1,15 +1,17 @@
-OBJS=*.c
-CC=gcc
-A=haha
+OBJS:=test.o
+CFLAGS:=-Wall
+
+CC:=gcc
+A:=haha
 export A
 
 test:$(OBJS)
+	
+	$(CC) -o test $< -lm
 
-	$(CC) -o test $(OBJS) -lm
+$(OBJS):%.o:%.c
 
-%.o:%.c %.h
-
-#	$(CC) -c *.c
+	$(CC) -c $(CFLAGS) $< -o $@
 
 include f.mk
 

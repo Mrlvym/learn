@@ -44,7 +44,7 @@ int main ()
 #endif 
 
 //atoi函数
-#if 0
+#if 1
 	char str[5] = {0};
 	int sum = 0;	
 
@@ -63,9 +63,9 @@ int main ()
 #endif
 
 //
-#if 1
+#if 0
 
-
+printf("hello world !\n");
 
 #endif
 
