@@ -145,5 +145,8 @@
 
 	总结：在分析的过程中会涉及到的文件夹有：board、common、cpu、drivers、include、lib_arm、lib_generic、sd_fusing。
 	
+	
+	接下来分析主Makefile的笔记在Makefile_分析文件中
+	
 		
 	

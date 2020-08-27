@@ -125,17 +125,26 @@ BUILD_DIR := $(shell cd $(BUILD_DIR) && /bin/pwd)
 $(if $(BUILD_DIR),,$(error output directory "$(saved-output)" does not exist))
 endif # ifneq ($(BUILD_DIR),)
 
+#编译过程中生成的中间文件存放的目录（BUILD_DIR）
 OBJTREE		:= $(if $(BUILD_DIR),$(BUILD_DIR),$(CURDIR))
+#代表是源码目录就是当前目录
 SRCTREE		:= $(CURDIR)
+#就是顶层目录
 TOPDIR		:= $(SRCTREE)
+#编译过程中生成的中间文件存放的目录
 LNDIR		:= $(OBJTREE)
+
+#总结：在默认编译下OBJTREE和SRCTREE是一样的当采用指定输出文件夹编译时两者不一样
 
 export	TOPDIR SRCTREE OBJTREE
 
+#Makefile源码根目录下的一个文件mkconfig（uboot的配置脚本文件）
 MKCONFIG	:= $(SRCTREE)/mkconfig
 export MKCONFIG
 
+#判断当前采用的是什么编译方式（OBJTREE 和 SRCTREE是否相等）
 ifneq ($(OBJTREE),$(SRCTREE))
+#当采用指定目录编译的情况下REMOTE_BUILD = 1
 REMOTE_BUILD	:= 1
 export REMOTE_BUILD
 endif
@@ -172,6 +181,11 @@ sinclude $(obj)include/autoconf.mk
 
 # load ARCH, BOARD, and CPU configuration
 include $(obj)include/config.mk
+#1，$(obj)include/config.mk不是源码自带的是在执行了make smdkc210_config 之后生成的一个文件，
+#	在这个文件中配置了几个环境变量ARCH（开发板CPU架构） CPU（CPU型号） BOARD（板子型号） 
+#	VENDOR（芯片厂商） SOC（SOC型号）
+#2，之所以没有直接给出而是采用这种配置的方式来进行生成，是因为我们希望经常改动这5个变量的值
+#	来达到uboot可移植的目的。这几个值可以用来配置你当前使用的硬件相关的信息。如（smdkc210_config在下面可以找到相关信息）
 export	ARCH CPU BOARD VENDOR SOC
 
 ifndef CROSS_COMPILE
@@ -221,13 +235,17 @@ endif	# sparc
 endif	# HOSTARCH,ARCH
 endif	# CROSS_COMPILE
 
+#CROSS_COMPILE代表交叉编译工具链的前缀（之所以只指定前缀是应为针对不同的硬件平台，就只有前缀是不同的后缀都是相同的）
+#这里通过条件编译的方式来经过ARCH环境变量来进行指定的赋值。（也可以使用make CROSS_COMPILE=xxx来进行赋值）
 export	CROSS_COMPILE
 
 # load other configuration
+#引用了根目录下的一个config.mk文件，接下来我们分析config.mk文件里的内容
 include $(TOPDIR)/config.mk
+
 #########################################################################
 # U-Boot objects....order is important (i.e. start must be first)
-
+#开始定义OBJS变量
 OBJS  = cpu/$(CPU)/start.o
 ifeq ($(CPU),i386)
 OBJS += cpu/$(CPU)/start16.o
@@ -353,6 +371,9 @@ __LIBS := $(subst $(obj),,$(LIBS)) $(subst $(obj),,$(LIBBOARD))
 
 # Always append ALL so that arch config.mk's can add custom ones
 ALL += $(obj)u-boot.srec $(obj)u-boot.bin $(obj)System.map $(U_BOOT_NAND) $(U_BOOT_ONENAND)
+
+#这里出现主Makefile的第一个目标all
+
 all:		$(ALL)
 
 $(obj)u-boot.hex:	$(obj)u-boot
@@ -544,6 +565,8 @@ include/license.h: tools/bin2header COPYING
 	 cat COPYING | gzip -9 -c | ./tools/bin2header license_gzip > include/license.h
 #########################################################################
 
+#未配置，这个符号用来作为各个开发板配置（在执行make x_210_sd_config）目标的依赖。
+#保证当我们重复执行配置命令时任然可以配置成功。
 unconfig:
 	@rm -f $(obj)include/config.h $(obj)include/config.mk \
 		$(obj)board/*/config.tmp $(obj)board/*/*/config.tmp \
@@ -3253,10 +3276,27 @@ omap3_zoom2_config :	unconfig
 
 smdkc100_config:	unconfig
 	@$(MKCONFIG) $(@:_config=) arm arm_cortexa8 smdkc100 samsung s5pc1xx
+
+#############################################################################
 	
 smdkc210_config:	unconfig
 	@$(MKCONFIG) $(@:_config=) arm arm_cortexa9 smdkc210 samsung s5pc210
-
+	
+	#这句话的意思就是调用了mkconfig脚本，然后给这个脚本传递了$(@:_config=)（代表将smdkc210_config中的_config替换为空）、
+	#arm（CPU架构）、arm_cortexa9（CPU架构型号）、smdkc210（开发板型号）、samsung（soc厂商）、s5pc210（soc型号）这六个参数
+	#所以：
+		#$1=smdkc210
+		#$2=arm
+		#$3=arm_cortexa9
+		#$4=smdkc210
+		#$5=samsung
+		#$6=s5pc210
+		#$#=6
+		
+	#接下来我们来分析mkconfig文件
+	
+	
+#############################################################################
 smdkc210_onenand_config:	unconfig
 	@$(MKCONFIG) $(@:_config=) arm arm_cortexa9 smdkc210 samsung s5pc210
 
