@@ -24,6 +24,7 @@ HOSTARCH := $(shell uname -m | \
 	    -e s/powerpc/ppc/ \
 	    -e s/ppc64/ppc/ \
 	    -e s/macppc/ppc/)
+
 HOSTOS := $(shell uname -s | tr '[:upper:]' '[:lower:]' | \
 	    sed -e 's/\(cygwin\).*/cygwin/')
 
@@ -31,8 +32,8 @@ HOSTOS := $(shell uname -s | tr '[:upper:]' '[:lower:]' | \
 
 hello:
 
-	echo $(HOSTARCH)
-	echo $(HOSTOS)
+	@echo $(HOSTARCH)
+	@echo $(HOSTOS)
 
 
 #测试结束	
