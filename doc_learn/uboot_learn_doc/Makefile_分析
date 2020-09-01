@@ -181,11 +181,15 @@ sinclude $(obj)include/autoconf.mk
 
 # load ARCH, BOARD, and CPU configuration
 include $(obj)include/config.mk
+
+
 #1，$(obj)include/config.mk不是源码自带的是在执行了make smdkc210_config 之后生成的一个文件，
 #	在这个文件中配置了几个环境变量ARCH（开发板CPU架构） CPU（CPU型号） BOARD（板子型号） 
 #	VENDOR（芯片厂商） SOC（SOC型号）
 #2，之所以没有直接给出而是采用这种配置的方式来进行生成，是因为我们希望经常改动这5个变量的值
 #	来达到uboot可移植的目的。这几个值可以用来配置你当前使用的硬件相关的信息。如（smdkc210_config在下面可以找到相关信息）
+
+
 export	ARCH CPU BOARD VENDOR SOC
 
 ifndef CROSS_COMPILE
@@ -239,9 +243,18 @@ endif	# CROSS_COMPILE
 #这里通过条件编译的方式来经过ARCH环境变量来进行指定的赋值。（也可以使用make CROSS_COMPILE=xxx来进行赋值）
 export	CROSS_COMPILE
 
+
+
+
+
+
 # load other configuration
 #引用了根目录下的一个config.mk文件，接下来我们分析config.mk文件里的内容
 include $(TOPDIR)/config.mk
+
+
+
+
 
 #########################################################################
 # U-Boot objects....order is important (i.e. start must be first)
@@ -371,6 +384,13 @@ __LIBS := $(subst $(obj),,$(LIBS)) $(subst $(obj),,$(LIBBOARD))
 
 # Always append ALL so that arch config.mk's can add custom ones
 ALL += $(obj)u-boot.srec $(obj)u-boot.bin $(obj)System.map $(U_BOOT_NAND) $(U_BOOT_ONENAND)
+
+
+
+
+
+
+
 
 #这里出现主Makefile的第一个目标all
 
@@ -564,6 +584,18 @@ CHANGELOG:
 include/license.h: tools/bin2header COPYING
 	 cat COPYING | gzip -9 -c | ./tools/bin2header license_gzip > include/license.h
 #########################################################################
+
+
+
+
+
+
+
+
+
+
+
+
 
 #未配置，这个符号用来作为各个开发板配置（在执行make x_210_sd_config）目标的依赖。
 #保证当我们重复执行配置命令时任然可以配置成功。
@@ -3278,6 +3310,20 @@ smdkc100_config:	unconfig
 	@$(MKCONFIG) $(@:_config=) arm arm_cortexa8 smdkc100 samsung s5pc1xx
 
 #############################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
 smdkc210_config:	unconfig
 	@$(MKCONFIG) $(@:_config=) arm arm_cortexa9 smdkc210 samsung s5pc210
@@ -3440,7 +3486,7 @@ mx31pdk_nand_config	: unconfig
 		echo "#define CONFIG_NAND_U_BOOT" >> $(obj)include/config.h;		\
 	else										\
 		echo "#define CONFIG_SKIP_LOWLEVEL_INIT" >> $(obj)include/config.h;	\
-		echo "#define CONFIG_SKIP_RELOCATE_UBOOT" >> $(obj)include/config.h;	\
+		echo "#define CONFIG_SKIP_RELOCATE_UBOOT" >> $(obj)include/config.h;	\f
 	fi
 	@$(MKCONFIG) -a mx31pdk arm arm1136 mx31pdk freescale mx31
 
