@@ -100,6 +100,8 @@ fi
 #
 # Create include file for Make
 #
+
+#创建config.mk文件，往里面填充ARCH、CPU、BOARD、VENDOR、SOC几个变量
 echo "ARCH   = $2" >  config.mk
 echo "CPU    = $3" >> config.mk
 echo "BOARD  = $4" >> config.mk
@@ -145,6 +147,7 @@ else
 	> config.h		# Create new config file
 fi
 echo "/* Automatically generated - do not edit */" >>config.h
+echo "#includ <configs/$1.h>" >>config.h
 
 for i in ${TARGETS} ; do
 	echo "#define CONFIG_MK_${i} 1" >>config.h ;
