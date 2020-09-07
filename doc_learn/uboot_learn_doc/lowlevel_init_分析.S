@@ -792,6 +792,10 @@ tzpc_init:
 	.align 14
 	// the following alignment creates the mmu table at address 0x4000.
 	.globl mmu_table
+	
+/********************************************
+	这一块是虚拟地址映射表是怎么生成的代码（不太需要关注）
+********************************************/
 mmu_table:
 	.set __base,0
 	// Access for iRAM

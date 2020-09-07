@@ -359,19 +359,21 @@ cache_init:
 	 * Go setup Memory and board specific bits prior to relocation.
 	 */
 	 
-	 
+	//在这里应该也要有一次设置栈的操作，用来调用lowlevel_init函数使用 
 	 
 	//（6）跳转到lowlevel_init(低层次初始化函数)	.
 	bl	lowlevel_init	/* go setup pll,mux,memory */
 
 
+	//（7）（PS_HOLD_CONTROL）供电锁存
 	ldr	r0, =0x1002330C  /* PS_HOLD_CONTROL register */
 	ldr	r1, =0x00005300	 /* PS_HOLD output high	*/
 	str	r1, [r0]
 
 
 	/* get ready to call C functions */
-	/*（7）设置好栈，准备调用函数*/
+	/*（8）设置DDR中的栈，此时在lowlevel_init中已近初始化了DDR，已经有大把的空间可以使用，没有必要再放在SRAM中，
+		   还有SRAM的空间有限，当大量使用栈的时候可能会溢出，使用的时候需要小心栈溢出*/
 	ldr	sp, _TEXT_PHY_BASE	/* setup temp stack pointer */
 	sub	sp, sp, #12
 	mov	fp, #0			/* no previous frame, so fp=0 */
@@ -387,13 +389,24 @@ cache_init:
 	 * and actually, memory controller must be configured before U-Boot
 	 * is running in ram.
 	 */
+	 /*（9）再次用相同的代码判断运行地址是在SRAM中还是在DDR中，来决定是否需要重定位
+			
+			冷启动时当前情况是uboot的前一部分（16Kb或者8Kb）开机自动从SD卡中加载到SRAM中正在运行，
+			uboot的第二部分（其实第二部分是整个uboot）还躺在SD卡的某个扇区开头的N个扇区中。此时
+			uboot的第一阶段已经结束了（第一阶段该做的事情基本做完了），结束之前要吧第二部分加载到DDR
+			中链接地址（TEXT_BASE），这个加载过程就叫做重定位。
+			*/
 	ldr	r0, =0xff000fff
 	bic	r1, pc, r0		/* r0 <- current base addr of code */
 	ldr	r2, _TEXT_BASE		/* r1 <- original base addr in ram */
 	bic	r2, r2, r0		/* r0 <- current base addr of code */
 	cmp     r1, r2                  /* compare r0, r1                  */
+	/*
+	 * bl 	movi_bl2_copy
+	 * 这里是重定位已经结束
+	*/
 	beq     after_copy		/* r0 == r1 then skip flash copy   */
-
+	/*跳转到after_copy去执行*/
 
 
 	ldr	r0, =0x11000104  /* GPL2(0)  */
@@ -510,25 +523,50 @@ nor_boot:
 @	bl	read_hword
 	b	after_copy
 
+/*
+
+*********************************************
+*（10）这里是虚拟地址映射（MMU）相关的代码after_copy
+	1，物理地址就是物理设备设计生产的时候赋予的地址。像裸机使用的寄存器地址就是CPU设计时指定的，
+	   这个就是物理地址，物理地址是硬件编码的，是设计生产时确定好的，一旦确定了就不能改变。
+	2，一个事实就是：寄存器的物理地址是没办法通过编程进行修改的，是多少就是多少，只能同查询数据
+	   手册获得并进行操作。坏处就是不够灵活。一个解决方案就是使用虚拟地址。
+	3，虚拟地址意思就是在我们软件操作和硬件被操作之间增加一个层次，叫做虚拟地址映射层。有了虚拟地址
+	   映射后，软件操作只需要操纵虚拟地址，硬件操作还是原来的物理地址，映射层建立了一个虚拟地址到物理
+	   地址的一个映射表。当我们软件运行的时候，软件中使用的虚拟地址就在映射表中查找到对应的物理地址，然后
+	   再发送给指定的硬件去执行（虚拟地址到物理地址的映射是不能够用软件来实现的（因为软件中用的就是虚拟地址））。
+	4，MMU就是内存管理单元。MMU实际就是SOC上的一个硬件单元，他的主要功能就是实现虚拟地址到物理地址的映射。
+	   MMU单元在CP15协处理器中进行控制，也就是所要控制MMU进行虚拟地址的映射，方法就是对CP15协处理器进行编程。
+	5，地址映射的额外收益
+		（1）访问控制：就是在管理上对内存进行分块，然后没块进行独立的虚拟地址映射，然后再每一块的映射关系中同时还
+			 实现了访问控制（对该块可读、可写、只读、只写、不可访问等控制）
+		（2）cache ：是快速缓存，比CPU慢比DDR快。CPU嫌弃DDR太慢了，于是将DDR中常用的内容事先读取到cache中，CPU每次找内容
+			 的时候优先在cache中寻找，cache中没有的时候才去DDR中去寻找。
+		参考博客：http://blog.chinaunix.net/xmlrpc.php?r=blog/article&uid=22891521&id=2109284
+*********************************************
+
+*/
 
 after_copy:
 
-
+/*判断在X210_sd.h中是否定义了CONFIG_ENABLE_MMU这个宏，如果定义了就代表使用虚拟地址映射，否则不使用虚拟地址映射*/
 #if defined(CONFIG_ENABLE_MMU)
 enable_mmu:
-	/* enable domain access */
+	/* enable domain access （启用域访问（C3寄存器））*/
 	ldr	r5, =0x0000ffff
 	mcr	p15, 0, r5, c3, c0, 0		@load domain access register
 
-	/* Set the TTB register */
-	ldr	r0, _mmu_table_base
+	/* Set the TTB register （设置TTB（转换表基地址）寄存器C2）*/
+	ldr	r0, _mmu_table_base		//通过这个_mmu_table_base-->mmu_table搜索可以追到lowlevel_init.S中去。
 	ldr	r1, =CFG_PHY_UBOOT_BASE
 	ldr	r2, =0xfff00000
 	bic	r0, r0, r2
 	orr	r1, r0, r1
 	mcr	p15, 0, r1, c2, c0, 0
 
-	/* Enable the MMU */
+	/* Enable the MMU （使能MMU）
+		cp15的c1寄存器的bit0控制着MMU的开关。只要置1就会开启MMU
+	*/
 mmu_on:
 	mrc	p15, 0, r0, c1, c0, 0
 	orr	r0, r0, #1
@@ -549,10 +587,14 @@ mmu_on:
 	str	r1, [r0]
 #endif
 
+
+
 skip_hw_init:
-	/* Set up the stack						    */
+	/* Set up the stack	（第三次设置栈）					    */
 stack_setup:
 #if defined(CONFIG_MEMORY_UPPER_CODE)
+	/*（11）第三次设置栈，还是在DDR中，之前虽然已经在DDR中设置过一次了，
+			本次设置是为了将栈的位置放在合适（安全，紧凑（紧贴着uboot）而不浪费内存）的位置*/
 	ldr	sp, =(CFG_UBOOT_BASE + CFG_UBOOT_SIZE - 0x1000)
 #else
 	ldr	r0, _TEXT_BASE		/* upper 128 KiB: relocated uboot   */
@@ -565,6 +607,8 @@ stack_setup:
 
 #endif
 
+
+/*（12）清空bss段_bss_start和_bss_end是从链接脚本中得来的*/
 clear_bss:
 	ldr	r0, _bss_start		/* find start of bss segment        */
 	ldr	r1, _bss_end		/* stop here                        */
@@ -576,10 +620,15 @@ clbss_l:
 	cmp	r0, r1
 	ble	clbss_l
 	
+	/*	
+	（13）这是uboot第一阶段的最后一条指令，执行完之后uboot第一阶段就结束了，
+		也是uboot第一阶段和第二阶段的分界线，是一个远跳转。
+		注意：这个远跳转是直接从SRAM中的第一阶段，直接跳转到了DDR中的第二阶段去执行。（DDR中的第一阶段不会执行）
+	*/
 	ldr	pc, _start_armboot
 
 _start_armboot:
-	.word start_armboot
+	.word start_armboot    /*start_armboot在lib_arm/board.c中，是uboot的第二阶段，用C语言实现*/
 
 #ifdef CONFIG_EVT1
 _dmc_density:
