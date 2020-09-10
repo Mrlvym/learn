@@ -297,31 +297,141 @@ static int arm_pci_init(void)
  * argument, and returns an integer return code, where 0 means
  * "continue" and != 0 means "fatal error, hang the system".
  */
+
+/*将返回值为int类型，形参为void类型的一个函数类型重命名为init_fnc_t*/
 typedef int (init_fnc_t) (void);
 
 int print_cpuinfo (void);
 
 init_fnc_t *init_sequence[] = {
-#if defined(CONFIG_ARCH_CPU_INIT)
+#if defined(CONFIG_ARCH_CPU_INIT)//这个宏定义应该没有定义（因为CPU相关的初始化在uboot第一阶段已经完成了）
 	arch_cpu_init,		/* basic arch cpu dependent setup */
 #endif
-	board_init,		/* basic board dependent setup */
+	board_init,		/* basic board dependent setup */ //开发板相关的初始化（主要做了网卡的初始化和DDR初始化）
+	
+	/*********************************************
+		board_init在board\samsung\smdkc210\smdkc210.c文件中
+		
+		int board_init(void)
+		{
+			//这里是声明了一下gd变量，因为下面有使用到gd变量
+			DECLARE_GLOBAL_DATA_PTR;
+		//网卡相关初始化（使用的是SMC911X网卡）
+		#ifdef CONFIG_DRIVER_SMC911X
+			smc9115_pre_init();
+			smc9115_pre_init这个函数中主要是网卡的GPIO相关的配置工作，应为SMC911X网卡的驱动是
+			现成的，我们所要做的是进行SMC911X网卡的驱动移植，只需要修改相关的硬件配置就可以了
+		#endif
+		
+		//网卡初始化使用的是（DM9000网卡）
+		#ifdef CONFIG_DRIVER_DM9000
+		//	dm9000_pre_init();
+		#endif
+
+			下面是关于初试化DDR的背景知识
+			在这里的初始化DDR和我们在汇编阶段lowlevel_init中初始化DDR是不同的，
+			当时是硬件的初始化为了让DDR工作起来，现在是软件结构中DDR相关的属性
+			配置，和地址设置相关的初始化。是纯软件层面的。
+			软件层次初始化DDR的原因是：对于uboot来说，他怎么知道开发板上到底有几片DDR内存，
+			每一片的地址、长度信息呢？在uboot的设计中采用了一种简单直接有效的方式：程序员
+			在移植uboot时，程序员自己再smdkc210.h文件中用宏定义（MACH_TYPE、PHYS_SDRAM_1）的
+			方式配置出DDR内存的信息，然后uboot只需要读取这些配置信息就可以了。（实际上还有一种
+			思路：就是uboot通过代码去读取硬件信息来知道DDR配置，但是uboot没有，但是电脑的bios
+			用的是这种方式）
+			
+			smdkc210.h文件中的配置如下：
+			配置了有几片DDR内存，每一片DDR内存的地址、长度。这些配置信息我们在uboot代码中使用到
+			内存的时候就可以从这里提取使用（想象我们uboot使用内存时使用的都是宏定义而不是直接使用数值）
+			
+			#define CONFIG_NR_DRAM_BANKS    2          /* we have 2 bank of DRAM */
+			#define SDRAM_BANK_SIZE         0x20000000    /* 512 MB */
+			#define PHYS_SDRAM_1            MEMORY_BASE_ADDRESS /* SDRAM Bank #1 */
+			#define PHYS_SDRAM_1_SIZE       SDRAM_BANK_SIZE
+			#define PHYS_SDRAM_2            (MEMORY_BASE_ADDRESS + SDRAM_BANK_SIZE) /* SDRAM Bank #2 */
+			#define PHYS_SDRAM_2_SIZE       SDRAM_BANK_SIZE
+			
+			//bi_arch_number代表开发板的机器码（开发板的唯一编号）
+			//机器码的作用是在uboot和linux内核之间进行比对和配置。（因为嵌入式的定制化太高了）
+			//在uboot给linux传参的时候机器码会传递给linux内核，然后linux内核会跟自身机器码对比
+			//（机器码必须要保证uboot和linux相同）
+			gd->bd->bi_arch_number = MACH_TYPE;
+			//bi_boot_params表示uboot给linux传参的内存地址，uboot事先将准备好的传参放在我们内存的一个地址处
+			//（bi_boot_params），然后linux就启动了内核，真正是通过寄存器r0，r1，r2来进行传递的其中有一个寄存器
+			//里放的就是bi_boot_params，内核读取寄存器的值，就知道了传递参数的地址，就去拿uboot传递的参数。
+			gd->bd->bi_boot_params = (PHYS_SDRAM_1+0x100);
+
+			return 0;
+		}
+	*********************************************/
 //#if defined(CONFIG_USE_IRQ)
-	interrupt_init,		/* set up exceptions */
+	interrupt_init,		/* set up exceptions */	//看名字是中断相关的初始化，实际是定时器相关初始化
+	/****************************************************************
+		interrupt_init函数在cpu\arm_cortexa9\s5pc210\interrupt.c中
+		这里面初试化了TIM4，因为TIM4没有中断功能，因此采用了轮询的方式来实现
+		uboot的bootdelay的定时时间。	
+	*****************************************************************/
 //#endif
 	//timer_init,		/* initialize timer */
 #ifdef CONFIG_FSL_ESDHC
 	//get_clocks,
 #endif
-	env_init,		/* initialize environment */
-	init_baudrate,		/* initialze baudrate settings */
-	serial_init,		/* serial communications setup */
-	console_init_f,		/* stage 1 init of console */
+	env_init,		/* initialize environment */ //环境变量初始化相关
+	/*******************************************************************
+		env_init函数在common\env_nand.c中
+		有很多env_init函数，是应为uboot的启动介质有很多种（iNand、emmc、sd卡等）,每种不同的介质在
+		存取env时候的方式是不同的所以才导致了有很多的env_init函数。
+		
+		env_init函数对DDR中维护的那一份环境变量做了基本的判定，判定里面有没有能用的环境变量，
+		当前因为我们还没有做从SD卡到DDR中的重定位，所以这些环境变量还不能够使用。
+	********************************************************************/
+	init_baudrate,		/* initialze baudrate settings */	//串口通信波特率相关的初始化
+	/*************************************************************************************
+		init_baudrate函数在lib_arm\board.c中
+		
+		static int init_baudrate (void)
+		{
+			char tmp[64];	/* long enough for environment variables */
+			int i = getenv_r ("baudrate", tmp, sizeof (tmp));
+			gd->bd->bi_baudrate = gd->baudrate = (i > 0)
+					? (int) simple_strtoul (tmp, NULL, 10)
+					: CONFIG_BAUDRATE;
+
+			return (0);
+		}
+		
+		重点关注getenv_r ("baudrate", tmp, sizeof (tmp));这个函数，这个函数是用来读取环境变量值的函数
+		读取回来得值会存放在tmp数组中，都是字符串形式，需要转换一下。
+		
+	*************************************************************************************/
+	serial_init,		/* serial communications setup */	//串口相关初始化（在汇编阶段串口已经初始化过硬件寄存器了）
+	/*************************************************************************
+		serial_init函数在cpu\arm_cortexa9\s5pc210\serial.c中
+		其实什么也没有做
+	*************************************************************************/
+	console_init_f,		/* stage 1 init of console */  //控制台相关初始化（_f是代表分阶段初始化）
+	/*********************************************************************************
+		console_init_f函数在common\console.c中
+		int console_init_f(void)
+		{
+			gd->have_console = 1; //将这个代表开启控制台
+
+		#ifdef CONFIG_SILENT_CONSOLE
+			if (getenv("silent") != NULL)
+				gd->flags |= GD_FLG_SILENT;
+		#endif
+
+			return 0;
+		}
+			
+	*********************************************************************************/
 	off_charge,		// xiebin.wang @ 20110531,for charger&power off device.
 
-	display_banner,		/* say that we are here */
+	display_banner,		/* say that we are here */	//用来串口打印uboot的logo（版本号）
 #if defined(CONFIG_DISPLAY_CPUINFO)
-	print_cpuinfo,		/* display cpu info (and speed) */
+	print_cpuinfo,		/* display cpu info (and speed) */  //用串口打印CPU配置信息
+	/***************************************************************************
+		
+	****************************************************************************/
 #endif
 #if defined(CONFIG_DISPLAY_BOARDINFO)
 	checkboard,		/* display board info */
@@ -340,14 +450,14 @@ init_fnc_t *init_sequence[] = {
 
 /*
 
-
+接下来start_armboot这个函数是uboot启动的第二阶段，接下来我们需要分析start_armboot这个函数。
 
 */
 
 
 void start_armboot (void)
 {
-	init_fnc_t **init_fnc_ptr;
+	init_fnc_t **init_fnc_ptr;//定义了一个二级函数指针
 	char *s;
 	int mmc_exist = 0;
 #if defined(CONFIG_VFD) || defined(CONFIG_LCD)
@@ -356,9 +466,82 @@ void start_armboot (void)
 
 	/* Pointer is writable since we allocated a register for it */
 	gd = (gd_t*)(_armboot_start - CONFIG_SYS_MALLOC_LEN - sizeof(gd_t));
+	/*
+	**********************************************注释*******************************************************************************************
+		gd_t是一个结构体变量，gd是一个gd_t*类型的结构体指针变量在本文件的第73行，
+		用一个宏DECLARE_GLOBAL_DATA_PTR来定义。
+		#define DECLARE_GLOBAL_DATA_PTR     register volatile gd_t * gd asm ("r8")
+		asm ("r8")代表指定存放在r8寄存器
+		为什么要将gd定义为register呢？gd这个全局变量是uboot中很重要的一个全局变量。
+		gd里边包含了uboot所用到的几乎所有的全局变量，这个gd变量经常被访问。将这个变量放在
+		register中可以提高访问的效率从而提高运行的效率。
+		
+		
+		gd结构体分析
+		typedef	struct	global_data {
+		volatile bd_t		*bd;				//存放开发板相关信息的（这个是很重要的结构体需要重点关注）
+		volatile unsigned long	flags;			//存放一些标志位相关的
+		volatile unsigned long	baudrate;		//存放通信波特率相关信息
+		volatile unsigned long	have_console;	/* serial_init() was called */ 		//代表当前是否有控制台（能够标准的printf和scanf）
+		volatile unsigned long	env_addr;	/* Address  of Environment struct */	//环境变量地址相关的
+		volatile unsigned long	env_valid;	/* Checksum of Environment valid? */	//在内存中的环境变量是否能够使用
+		volatile unsigned long	fb_base;	/* base address of frame buffer */		//缓存的基地址
+		#ifdef CONFIG_VFD
+			volatile unsigned char	vfd_type;	/* display type */
+		#endif
+		#ifdef CONFIG_FSL_ESDHC
+			volatile unsigned long	sdhc_clk;
+		#endif
+		#if 0
+			unsigned long	cpu_clk;	/* CPU clock in Hz!		*/
+			unsigned long	bus_clk;
+			phys_size_t	ram_size;	/* RAM size */
+			unsigned long	reset_status;	/* reset status register at boot */
+		#endif
+			volatile void		**jt;		/* jump table */ //跳转表
+		} gd_t;
+		
+		bd结构体分析
+		typedef struct bd_info {
+
+			intbi_baudrate;//硬件串口波特率/* serial console baudrate */
+
+			unsigned longbi_ip_addr;//开发板IP地址/* IP Address */
+
+			unsigned charbi_enetaddr[6];//开发板网卡地址 /* Ethernet adress */
+
+			struct environment_s       *bi_env;//环境变量指针
+
+			ulong        bi_arch_number;//机器码/* unique id for this board */
+
+			ulong        bi_boot_params;//uboot启动参数/* where this board expects params */
+
+			struct/* RAM configuration */
+
+			{
+
+				ulong start;
+
+				ulong size;
+
+			}bi_dram[CONFIG_NR_DRAM_BANKS];//内存插条信息
+
+			#ifdef CONFIG_HAS_ETH1
+
+				/* second onboard ethernet port */
+
+				unsigned char   bi_enet1addr[6];//第二块网卡的地址
+
+			#endif
+
+		} bd_t;
+		
+	*****************************************注释********************************************************************************************	
+	*/
 	/* compiler optimization barrier needed for GCC >= 3.4 */
 	__asm__ __volatile__("": : :"memory");
-
+	
+	/*清空gd结构体，和bd结构体*/
 	memset ((void*)gd, 0, sizeof (gd_t));
 	gd->bd = (bd_t*)((char*)gd - sizeof(bd_t));
 	memset (gd->bd, 0, sizeof (bd_t));
@@ -366,10 +549,19 @@ void start_armboot (void)
 //	gd->flags |= GD_FLG_RELOC;
 
 	monitor_flash_len = _bss_start - _armboot_start;
-
+	
+	/*
+		这个for循环是遍历init_sequence（是一个包含了很多函数的函数指针数组）数组，直到NULL为止
+		在init_sequence函数指针数组中存放的都是跟board硬件初始化相关的一些函数，通过for循环的方式
+		来依次执行这些初始化函数。
+	*/
 	for (init_fnc_ptr = init_sequence; *init_fnc_ptr; ++init_fnc_ptr) {
-		if ((*init_fnc_ptr)() != 0) {
-			hang ();
+		/*
+			当判断init_sequence数组中的函数有一个执行不成功时（执行成功就会返回0），
+			调用hang函数（是一个死循环）来挂起uboot的程序，此时不能够恢复，只能重启。
+		*/
+		if ((*init_fnc_ptr)() != 0) {	
+			hang ();//死循环，只能重启uboot
 		}
 	}
 	
@@ -437,6 +629,7 @@ void start_armboot (void)
 #endif
 
 	/* initialize environment */
+	//这里是环境变量从SD到DDR中的重定位（relocate）
 	env_relocate ();
 
 #ifdef CONFIG_VFD
@@ -532,6 +725,12 @@ extern void davinci_eth_set_mac_addr (const u_int8_t *addr);
 	recovery_preboot();
 #endif
 
+	/*
+		上边都是uboot对硬件什么的初始化工作
+		接下来的main_loop函数就是在uboot启动过程到了bootdelay倒计时的时候，
+		按下任意键进入uboot的命令行模式，在命令行下输入的命令都是由main_loop
+		函数来进行接收解析处理的。
+	*/
 	for (;;) {
 		main_loop ();
 	}
