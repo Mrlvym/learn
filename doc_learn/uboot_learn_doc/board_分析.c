@@ -430,20 +430,193 @@ init_fnc_t *init_sequence[] = {
 #if defined(CONFIG_DISPLAY_CPUINFO)
 	print_cpuinfo,		/* display cpu info (and speed) */  //用串口打印CPU配置信息
 	/***************************************************************************
-		
+		print_cpuinfo函数在cpu\arm_cortexa9\s5pc210\speed.c文件中
+		里面有get_PLLCLK、get_APLL_CLK、get_MPLL_CLK、get_ARM_CLK这几个函数
+		都是自动获取我们cpu相关的配置信息的函数
 	****************************************************************************/
 #endif
 #if defined(CONFIG_DISPLAY_BOARDINFO)
-	checkboard,		/* display board info */
+	checkboard,		/* display board info */	//通过串口打印开发板名称
+	/*************************************************************************
+		checkboard函数在board\samsung\smdkc210\smdkc210.c文件中
+		int checkboard(void)
+		{
+			printf("Board:	%s%s\n", CONFIG_DEVICE_STRING,CORE_NUM_STR);
+			return (0);
+		}
+		#define CONFIG_DEVICE_STRING    "iTOP-4412"	//这个宏定义就是填充了开发板的名称
+	*************************************************************************/
 #endif
+//如果宏定义了CONFIG_HARD_I2C或者CONFIG_SOFT_I2C就会启动i2c功能，这两宏的定义还是有条件（在smdkc210.h文件中）
 #if defined(CONFIG_HARD_I2C) || defined(CONFIG_SOFT_I2C)
 	//init_func_i2c,
+	/*********************************************************
+		就在该文件中
+		static int init_func_i2c (void)
+		{
+			puts ("I2C:   ");
+			i2c_init (CONFIG_SYS_I2C_SPEED, CONFIG_SYS_I2C_SLAVE);
+			puts ("ready\n");
+			return (0);
+		}
+	*********************************************************/
 #endif
-	dram_init,		/* configure available RAM banks */
+	dram_init,		/* configure available RAM banks */	//初始化gd->bd->bi_dram，开发板的SDRAM配置信息
+	/****************************************************************************
+		dram_init函数在board\samsung\smdkc210\smdkc210.c文件中
+		
+		dram_init都是在给gd-bd里面的关于DDR配置部分的全局变量赋值，让gd-bd数据记录下当前开发板的DDR的配置信息，
+		以便于uboot使用内存。
+		int dram_init(void)
+		{
+			DECLARE_GLOBAL_DATA_PTR;
+
+			//if(((PRO_ID & 0x300) >> 8) == 2){
+			if(((*((volatile unsigned long *)CHIP_ID_BASE) & 0x300) >> 8) == 2){
+		#ifdef CONFIG_EVT1
+				printf("POP type: ");
+				if(dmc_density == 6){
+					printf("POP_B\n");
+					nr_dram_banks = 2;
+					gd->bd->bi_dram[0].start = PHYS_SDRAM_1;
+					gd->bd->bi_dram[0].size = PHYS_SDRAM_1_SIZE;
+					gd->bd->bi_dram[1].start = PHYS_SDRAM_2;
+					gd->bd->bi_dram[1].size = 0x4000000;//PHYS_SDRAM_2_SIZE;
+					/*gd->bd->bi_dram[2].start = PHYS_SDRAM_3;
+					gd->bd->bi_dram[2].size = PHYS_SDRAM_3_SIZE;
+					gd->bd->bi_dram[3].start = PHYS_SDRAM_4;
+					gd->bd->bi_dram[3].size = PHYS_SDRAM_4_SIZE;*/
+				}
+				else if(dmc_density == 5){
+					printf("POP_A\n");
+					nr_dram_banks = 2;
+					gd->bd->bi_dram[0].start = PHYS_SDRAM_1;
+					gd->bd->bi_dram[0].size = PHYS_SDRAM_1_SIZE;
+					gd->bd->bi_dram[1].start = PHYS_SDRAM_2;
+					gd->bd->bi_dram[1].size = PHYS_SDRAM_2_SIZE;
+				}
+				else{//ly
+							printf("POP for C220\n");
+
+		#if defined(CONFIG_POP_2GDDR) || defined(CONFIG_POP_2GDDR_Ubuntu)
+							nr_dram_banks = 8;
+		#else
+							nr_dram_banks = 4;
+		#endif
+
+							gd->bd->bi_dram[0].start = PHYS_SDRAM_1;
+							gd->bd->bi_dram[0].size = PHYS_SDRAM_1_SIZE;
+							gd->bd->bi_dram[1].start = PHYS_SDRAM_2;
+							gd->bd->bi_dram[1].size = PHYS_SDRAM_2_SIZE;
+							gd->bd->bi_dram[2].start = PHYS_SDRAM_3;
+							gd->bd->bi_dram[2].size = PHYS_SDRAM_3_SIZE;
+							gd->bd->bi_dram[3].start = PHYS_SDRAM_4;
+							gd->bd->bi_dram[3].size = PHYS_SDRAM_4_SIZE;
+
+		#if defined(CONFIG_POP_2GDDR) || defined(CONFIG_POP_2GDDR_Ubuntu)
+
+							gd->bd->bi_dram[4].start = PHYS_SDRAM_5;
+							gd->bd->bi_dram[4].size = PHYS_SDRAM_5_SIZE;
+							gd->bd->bi_dram[5].start = PHYS_SDRAM_6;
+							gd->bd->bi_dram[5].size = PHYS_SDRAM_6_SIZE;
+							gd->bd->bi_dram[6].start = PHYS_SDRAM_7;
+							gd->bd->bi_dram[6].size = PHYS_SDRAM_7_SIZE;
+							gd->bd->bi_dram[7].start = PHYS_SDRAM_8;
+							gd->bd->bi_dram[7].size = PHYS_SDRAM_8_SIZE;
+
+		#endif
+					
+				}
+		#else
+				nr_dram_banks = 2;
+				gd->bd->bi_dram[0].start = PHYS_SDRAM_1;
+				gd->bd->bi_dram[0].size = PHYS_SDRAM_1_SIZE;
+				gd->bd->bi_dram[1].start = PHYS_SDRAM_2;
+				gd->bd->bi_dram[1].size = PHYS_SDRAM_2_SIZE;
+		#endif
+			}
+			else{
+				nr_dram_banks = 8;
+				gd->bd->bi_dram[0].start = PHYS_SDRAM_1;
+				gd->bd->bi_dram[0].size = PHYS_SDRAM_1_SIZE;
+				gd->bd->bi_dram[1].start = PHYS_SDRAM_2;
+				gd->bd->bi_dram[1].size = PHYS_SDRAM_2_SIZE;
+				gd->bd->bi_dram[2].start = PHYS_SDRAM_3;
+				gd->bd->bi_dram[2].size = PHYS_SDRAM_3_SIZE;
+				gd->bd->bi_dram[3].start = PHYS_SDRAM_4;
+				gd->bd->bi_dram[3].size = PHYS_SDRAM_4_SIZE;
+				gd->bd->bi_dram[4].start = PHYS_SDRAM_5;
+				gd->bd->bi_dram[4].size = PHYS_SDRAM_5_SIZE;
+				gd->bd->bi_dram[5].start = PHYS_SDRAM_6;
+				gd->bd->bi_dram[5].size = PHYS_SDRAM_6_SIZE;
+				gd->bd->bi_dram[6].start = PHYS_SDRAM_7;
+				gd->bd->bi_dram[6].size = PHYS_SDRAM_7_SIZE;
+				gd->bd->bi_dram[7].start = PHYS_SDRAM_8;
+				gd->bd->bi_dram[7].size = PHYS_SDRAM_8_SIZE;
+			
+			}
+
+		/*
+			gd->bd->bi_dram[0].start = PHYS_SDRAM_1;
+			gd->bd->bi_dram[0].size = PHYS_SDRAM_1_SIZE;
+
+		#if defined(CONFIG_SPARSEMEM)
+			gd->bd->bi_dram[1].start = PHYS_SDRAM_2;
+			gd->bd->bi_dram[1].size = PHYS_SDRAM_2_SIZE;
+		#endif
+		*/
+
+		//for trustzone
+		#ifdef CONFIG_TRUSTZONE
+			gd->bd->bi_dram[nr_dram_banks - 1].size -= 0x100000;
+		#endif
+
+			return 0;
+		}
+	****************************************************************************/
 #if defined(CONFIG_CMD_PCI) || defined (CONFIG_PCI)
 	//arm_pci_init,
 #endif
-	display_dram_config,
+	display_dram_config,	//打印显示DDR相关的配置信息
+	/***********************************************************
+		display_dram_config函数就在该文件中
+		重点关注的函数是print_size
+		在uboot命令行模式下使用bdinfo命令可以查看DDR硬件相关的配置信息，他会把gd-bd下跟硬件配置相关的东西都打印出来
+		static int display_dram_config (void)
+		{
+			int i;
+
+		#ifdef DEBUG
+			puts ("RAM Configuration:\n");
+
+			for(i=0; i<CONFIG_NR_DRAM_BANKS; i++) {
+				printf ("Bank #%d: %08lx ", i, gd->bd->bi_dram[i].start);
+				print_size (gd->bd->bi_dram[i].size, "\n");
+			}
+		#else
+			ulong size = 0;
+
+			for (i=0; i<CONFIG_NR_DRAM_BANKS; i++) {
+				size += gd->bd->bi_dram[i].size;
+			}
+
+		#if  defined(CONFIG_SCP_1GDDR) ||  defined(CONFIG_SCP_2GDDR) || defined(CONFIG_SCP_1GDDR_Ubuntu) || defined(CONFIG_SCP_2GDDR_Ubuntu)  //add by dg
+
+			size += 0x100000;
+		#endif
+
+		#if defined(CONFIG_POP_2GDDR) || defined(CONFIG_POP_2GDDR_Ubuntu) 
+			puts("DRAM: ");
+			puts("2G\n");
+		#else
+			puts("DRAM:	");
+			print_size(size, "\n");
+		#endif
+		#endif
+
+			return (0);
+		}
+	***********************************************************/
 	NULL,
 };
 
@@ -566,15 +739,21 @@ void start_armboot (void)
 	}
 	
 	/* armboot_start is defined in the board-specific linker script */
+	/********************************************************************
+		mem_malloc_init函数在当前文件中，用来初始化uboot的堆管理器
+		uboot在DDR中自己维护了一段堆内存（896KB左右），肯定有一套代码来管理这个堆内存
+		初始化完之后，我们就可以使用malloc和free函数来进行堆内存的分配和释放
+	*********************************************************************/
+	 /* 初始化堆空间 */
 	mem_malloc_init (_armboot_start - CONFIG_SYS_MALLOC_LEN,
 			CONFIG_SYS_MALLOC_LEN);
 
 #ifndef CONFIG_SYS_NO_FLASH
 	/* configure available FLASH banks */
-	display_flash_config (flash_init ());
+	display_flash_config (flash_init ());	//这里打印的是norflash相关的信息
 #endif /* CONFIG_SYS_NO_FLASH */
 
-#ifdef CONFIG_VFD
+#ifdef CONFIG_VFD	//uboot中自带的LCD显示相关的内容，我们没有使用
 #	ifndef PAGE_SIZE
 #	  define PAGE_SIZE 4096
 #	endif
@@ -587,7 +766,7 @@ void start_armboot (void)
 	gd->fb_base = addr;
 #endif /* CONFIG_VFD */
 
-#ifdef CONFIG_LCD
+#ifdef CONFIG_LCD	//uboot中自带的LCD显示相关的内容，我们没有使用
 	/* board init may have inited fb_base */
 	if (!gd->fb_base) {
 #		ifndef PAGE_SIZE
@@ -603,6 +782,8 @@ void start_armboot (void)
 	}
 #endif /* CONFIG_LCD */
 
+
+/*这些代码是开发板独有的配置信息，可能会有很多，用条件编译来进行选择*/
 #if defined(CONFIG_CMD_NAND)
 	puts ("NAND:	");
 	nand_init();		/* go init the NAND */
@@ -615,6 +796,16 @@ void start_armboot (void)
 #ifdef CONFIG_GENERIC_MMC
 	puts ("MMC:   ");
 	mmc_exist = mmc_initialize (gd->bd);
+	/*******************************************************
+		mmc_initialize函数在drivers\mmc\mmc.c文件中
+		是MMC相关的一些基础的初始化，其实就是用来初始化SoC内部的SD/MMC控制器
+		uboot中对硬件的操作（譬如网卡、SD卡.......）都是借用了linux内核中的驱动
+		来实现的，uboot根目录下的drivers文件夹，这里面放的全都是从linux内核中移植
+		过来的各种驱动源码。
+		mmc_initialize函数是具体硬件架构无关的一个MMC初始化函数，所有的使用了这套架构
+		的代码都调用了这个函数来完成MMC初始化。mmc_initialize函数中调用board_mmc_init
+		或者cpu_mmc_init来完成具体的硬件的MMc控制器初始化工作。
+	********************************************************/
 	if (mmc_exist != 0)
 	{
 		puts ("0 MB\n");
@@ -622,14 +813,22 @@ void start_armboot (void)
 
 #endif
 
-	
+
+/*DATAFLASH一般是SPI相关的flash*/	
 #ifdef CONFIG_HAS_DATAFLASH
 	AT91F_DataflashInit();
 	dataflash_print_info();
 #endif
 
 	/* initialize environment */
-	//这里是环境变量从SD到DDR中的重定位（relocate）
+	/*********************************************************************************
+		这里是环境变量从SD到DDR中的重定位（relocate）
+		SD卡中有一些（8个）独立的扇区用来存放uboot的环境变量，但是我们在烧录/部署系统时，我们只
+		烧录了uboot、kernel和rootfs分区并没有烧录uboot环境变量分区，此时我们去读取Uboot的环境变量
+		分区会出错。那么环境变量是从哪里来的呢？其实在uboot的源码里面有一份硬编码的uboot环境变量，
+		当第一次读取失败时，uboot会读取代码中的这一份uboot环境变量到SD卡中的uboot环境变量分区中去，
+		然后再经过重定位到DDR中。之后在SD卡的uboot环境变量分区就有了一份uboot环境变量。
+	*********************************************************************************/
 	env_relocate ();
 
 #ifdef CONFIG_VFD
@@ -642,17 +841,30 @@ void start_armboot (void)
 #endif
 
 	/* IP Address */
+	/**************************************************************
+		开发板的IP地址是在gd->bd中维护的，来源于环境变量ipaddr。getenv函数用来回去字符串
+		类型的IP地址，然后用string_to_ip函数将字符串的IP地址转换为点分十进制格式。
+	**************************************************************/
 	gd->bd->bi_ip_addr = getenv_IPaddr ("ipaddr");
-
+	
+	/***************************************************************
+		是设备相关初始化（可能不叫这个名字例如：devices_init），这里的设备指的是开发板上的
+		硬件设备。放在这里初试化的设备都是驱动设备，这个函数本来就是从驱动框架中衍生的。
+		uboot中很多设备的驱动都是直接从linux内核移植过来的。这里只是集中到一个函数里去做
+		这些设备的初始化工作。
+	******************************************************************/
 	stdio_init ();	/* get the devices list going. */
 
-	jumptable_init ();
+	jumptable_init (); //跳转表初始化（本身不重要）
 
 #if defined(CONFIG_API)
 	/* Initialize API */
 	api_init ();
 #endif
-
+	/**************************************************************
+		console_init_r是控制台的第二阶段初始化（console_init_f是第一阶段），第一阶段没做什么初始化
+		第二阶段做了很多初始化
+	****************************************************************/
 	console_init_r ();	/* fully init console as a device */
 
 #if defined(CONFIG_ARCH_MISC_INIT)
