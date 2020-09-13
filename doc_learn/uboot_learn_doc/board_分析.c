@@ -485,7 +485,7 @@ init_fnc_t *init_sequence[] = {
 					/*gd->bd->bi_dram[2].start = PHYS_SDRAM_3;
 					gd->bd->bi_dram[2].size = PHYS_SDRAM_3_SIZE;
 					gd->bd->bi_dram[3].start = PHYS_SDRAM_4;
-					gd->bd->bi_dram[3].size = PHYS_SDRAM_4_SIZE;*/
+					gd->bd->bi_dram[3].size = PHYS_SDRAM_4_SIZE;*
 				}
 				else if(dmc_density == 5){
 					printf("POP_A\n");
@@ -655,41 +655,41 @@ void start_armboot (void)
 		volatile bd_t		*bd;				//存放开发板相关信息的（这个是很重要的结构体需要重点关注）
 		volatile unsigned long	flags;			//存放一些标志位相关的
 		volatile unsigned long	baudrate;		//存放通信波特率相关信息
-		volatile unsigned long	have_console;	/* serial_init() was called */ 		//代表当前是否有控制台（能够标准的printf和scanf）
-		volatile unsigned long	env_addr;	/* Address  of Environment struct */	//环境变量地址相关的
-		volatile unsigned long	env_valid;	/* Checksum of Environment valid? */	//在内存中的环境变量是否能够使用
-		volatile unsigned long	fb_base;	/* base address of frame buffer */		//缓存的基地址
+		volatile unsigned long	have_console;	/* serial_init() was called * 	//代表当前是否有控制台（能够标准的printf和scanf）
+		volatile unsigned long	env_addr;	/* Address  of Environment struct *	//环境变量地址相关的
+		volatile unsigned long	env_valid;	/* Checksum of Environment valid? *	//在内存中的环境变量是否能够使用
+		volatile unsigned long	fb_base;	/* base address of frame buffer *	//缓存的基地址
 		#ifdef CONFIG_VFD
-			volatile unsigned char	vfd_type;	/* display type */
+			volatile unsigned char	vfd_type;	/* display type *
 		#endif
 		#ifdef CONFIG_FSL_ESDHC
 			volatile unsigned long	sdhc_clk;
 		#endif
 		#if 0
-			unsigned long	cpu_clk;	/* CPU clock in Hz!		*/
+			unsigned long	cpu_clk;	/* CPU clock in Hz!		*
 			unsigned long	bus_clk;
-			phys_size_t	ram_size;	/* RAM size */
-			unsigned long	reset_status;	/* reset status register at boot */
+			phys_size_t	ram_size;	/* RAM size *
+			unsigned long	reset_status;	/* reset status register at boot *
 		#endif
-			volatile void		**jt;		/* jump table */ //跳转表
+			volatile void		**jt;		/* jump table * //跳转表
 		} gd_t;
 		
 		bd结构体分析
 		typedef struct bd_info {
 
-			intbi_baudrate;//硬件串口波特率/* serial console baudrate */
+			intbi_baudrate;/* serial console baudrate * //硬件串口波特率
 
-			unsigned longbi_ip_addr;//开发板IP地址/* IP Address */
+			unsigned longbi_ip_addr;/* IP Address * //开发板IP地址
 
-			unsigned charbi_enetaddr[6];//开发板网卡地址 /* Ethernet adress */
+			unsigned charbi_enetaddr[6];//开发板网卡地址 /* Ethernet adress *
 
 			struct environment_s       *bi_env;//环境变量指针
 
-			ulong        bi_arch_number;//机器码/* unique id for this board */
+			ulong        bi_arch_number;/* unique id for this board * //机器码
 
-			ulong        bi_boot_params;//uboot启动参数/* where this board expects params */
+			ulong        bi_boot_params;/* where this board expects params * //uboot启动参数
 
-			struct/* RAM configuration */
+			struct/* RAM configuration *
 
 			{
 
@@ -701,7 +701,7 @@ void start_armboot (void)
 
 			#ifdef CONFIG_HAS_ETH1
 
-				/* second onboard ethernet port */
+				/* second onboard ethernet port *
 
 				unsigned char   bi_enet1addr[6];//第二块网卡的地址
 
@@ -866,6 +866,12 @@ void start_armboot (void)
 		第二阶段做了很多初始化
 	****************************************************************/
 	console_init_r ();	/* fully init console as a device */
+	/**************************************************
+		控制台相关的纯软件配置相关的初始化，实际上就是直接调用的串口操控的函数，
+		实际上用不用没有太大的区别，但是在linux内核中控制台就不一样了，能够提供
+		串口的缓冲机制。
+	****************************************************/
+	
 
 #if defined(CONFIG_ARCH_MISC_INIT)
 	/* miscellaneous arch dependent initialisations */
@@ -878,6 +884,18 @@ void start_armboot (void)
 
 	/* enable exceptions */
 	enable_interrupts ();
+	/*************************************************************
+		中断初始化相关的程序，这里指的是CPSR中总中断标志位的使能。
+		因为我们的uboot中没有定义使用中断的宏，因此enable_interrupts
+		函数是一个空函数。
+		
+		编程技巧：用宏定义来进行条件编译的时候，有两种方式
+			1，在调用函数的时候使用宏的条件编译，当定义了这个宏就调用这个函数
+			   如果没有定义宏就不调用函数。
+			2,在函数实现的时候使用宏定义进行条件编译，函数调用是都有的，但是根据
+			  宏定义进行条件编译调用两个或者多个函数实现体，具体定义了哪个宏，就会
+			  调用哪个函数实现体。
+	******************************************************************/
 
 	/* Perform network card initialisation if necessary */
 #ifdef CONFIG_DRIVER_TI_EMAC
@@ -899,6 +917,10 @@ extern void davinci_eth_set_mac_addr (const u_int8_t *addr);
 	}
 #endif /* CONFIG_DRIVER_SMC91111 || CONFIG_DRIVER_LAN91C96 */
 
+	/***********************************************************
+		loadaddr、bootfile这两个环境变量都是内核启动有关的，、
+		在启动内核时会参考这两个环境变量的值
+	************************************************************/
 	/* Initialize from environment */
 	if ((s = getenv ("loadaddr")) != NULL) {
 		load_addr = simple_strtoul (s, NULL, 16);
@@ -911,6 +933,32 @@ extern void davinci_eth_set_mac_addr (const u_int8_t *addr);
 
 #ifdef BOARD_LATE_INIT
 	board_late_init ();
+	/*****************************************************
+		这个函数是开发板晚期的初始化相关的初始化部分，就是剩下的一些必须放在最后初始化的部分。
+		int board_late_init (void)
+		{
+			int ret = check_bootmode();
+			if ((ret == BOOT_MMCSD || ret == BOOT_EMMC441 || ret == BOOT_EMMC43 )
+						&& boot_mode == 0) {
+				//printf("board_late_init\n");
+				char boot_cmd[100];
+		/* modify by cym 20131206 *
+		#if 0
+				sprintf(boot_cmd, "movi read kernel 40008000;movi read rootfs 40d00000 100000;bootm 40008000 40d00000");
+		#else
+		#ifdef SMDK4412_SUPPORT_UBUNTU
+				sprintf(boot_cmd, "movi read kernel 40008000;bootm 40008000 40d00000");
+		#else
+				sprintf(boot_cmd, "movi read kernel 40008000;movi read rootfs 40df0000 100000;bootm 40008000 40df0000");
+		#endif
+		#endif
+		/* end modify *
+				setenv("bootcmd", boot_cmd);
+				}
+
+			return 0;
+		}		
+	*******************************************************/
 #endif
 
 #ifdef CONFIG_BITBANGMII
@@ -921,6 +969,9 @@ extern void davinci_eth_set_mac_addr (const u_int8_t *addr);
 	puts ("Net:   ");
 #endif
 	eth_initialize(gd->bd);
+	/********************************************************、
+		网卡相关的初始化。
+	**********************************************************/
 #if defined(CONFIG_RESET_PHY_R)
 	debug ("Reset Ethernet PHY\n");
 	reset_phy();
@@ -935,14 +986,25 @@ extern void davinci_eth_set_mac_addr (const u_int8_t *addr);
 	/* main_loop() can return to retry autoboot, if so just run it again. */
 #ifdef CONFIG_RECOVERY //mj for factory reset
 	recovery_preboot();
+	/********************************************
+		uboot启动进入命令行之前的一些初始化，如LCD和显示logo相关的初始化。
+	********************************************/
 #endif
 
-	/*
+	/***************************************************************************
 		上边都是uboot对硬件什么的初始化工作
 		接下来的main_loop函数就是在uboot启动过程到了bootdelay倒计时的时候，
 		按下任意键进入uboot的命令行模式，在命令行下输入的命令都是由main_loop
 		函数来进行接收解析处理的。
-	*/
+	***************************************************************************/
+	
+	/*************************************************************************
+		check menukey to update from sd
+		这是uboot启动最后阶段设计的一个自动更新功能，就是我们将linux内核镜像放在sd卡中，
+		然后再启动的时候按下指定的按键就会进入自动更新模式，这样uboot就会从sd卡中读取内核
+		镜像，然后将内核烧录到iNand中去，下次启动时将sd卡拔掉就能直接从iNand中启动内核。
+		这种方式比较适合量产的时候的内核部署。
+	***************************************************************************/
 	for (;;) {
 		main_loop ();
 	}
