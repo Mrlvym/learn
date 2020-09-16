@@ -1,0 +1,17 @@
+讯为iTop_4412开发板uboot编译方式
+
+//清空上次编译产生的中间文件
+make distclean
+
+//重新编译
+./build_uboot.sh SCP_1GDDR  编译的是支持安卓版本uboot
+./build_uboot.sh SCP_1GDDR_Ubuntu  编译的是支持linux版本uboot
+
+//或者这样重新编译也可以
+make itop_4412_android_config_scp_1GDDR //配置支持安卓的板级信息
+make
+
+
+make itop_4412_ubuntu_config_scp_1GDDR  //配置支持linux的板级信息
+make
+
