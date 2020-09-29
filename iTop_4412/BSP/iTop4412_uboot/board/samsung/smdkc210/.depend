@@ -1,7 +1,7 @@
 lowlevel_init.o: lowlevel_init.S \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/version.h \
@@ -50,7 +50,7 @@ smdkc210.o: smdkc210.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \

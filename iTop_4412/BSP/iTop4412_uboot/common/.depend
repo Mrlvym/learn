@@ -2,7 +2,7 @@ ace_sha1.o: ace_sha1.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -43,7 +43,7 @@ cmd_bdinfo.o: cmd_bdinfo.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -83,7 +83,7 @@ cmd_boot.o: cmd_boot.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -123,7 +123,7 @@ cmd_bootm.o: cmd_bootm.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -169,7 +169,7 @@ cmd_console.o: cmd_console.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -212,7 +212,7 @@ cmd_echo.o: cmd_echo.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -252,7 +252,7 @@ cmd_elf.o: cmd_elf.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -295,7 +295,7 @@ cmd_ext2.o: cmd_ext2.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -343,7 +343,7 @@ cmd_fastboot.o: cmd_fastboot.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -388,7 +388,7 @@ cmd_fat.o: cmd_fat.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -432,7 +432,7 @@ cmd_help.o: cmd_help.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -472,7 +472,7 @@ cmd_itest.o: cmd_itest.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -512,7 +512,7 @@ cmd_load.o: cmd_load.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -557,7 +557,7 @@ cmd_max8997.o: cmd_max8997.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -597,7 +597,7 @@ cmd_mdmupgrade.o: cmd_mdmupgrade.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -644,7 +644,7 @@ cmd_mem.o: cmd_mem.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -688,7 +688,7 @@ cmd_misc.o: cmd_misc.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -728,7 +728,7 @@ cmd_mmc.o: cmd_mmc.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -777,7 +777,7 @@ cmd_mmc_fdisk.o: cmd_mmc_fdisk.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -821,7 +821,7 @@ cmd_movi.o: cmd_movi.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -865,7 +865,7 @@ cmd_nvedit.o: cmd_nvedit.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -909,7 +909,7 @@ cmd_pcmcia.o: cmd_pcmcia.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -952,7 +952,7 @@ cmd_source.o: cmd_source.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -993,7 +993,7 @@ cmd_usbd.o: cmd_usbd.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -1041,7 +1041,7 @@ cmd_version.o: cmd_version.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -1081,7 +1081,7 @@ cmd_ximg.o: cmd_ximg.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -1122,7 +1122,7 @@ command.o: command.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -1162,7 +1162,7 @@ console.o: console.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -1209,7 +1209,7 @@ decompress_ext4.o: decompress_ext4.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -1261,7 +1261,7 @@ dlmalloc.o: dlmalloc.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -1302,7 +1302,7 @@ env_auto.o: env_auto.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -1360,7 +1360,7 @@ env_common.o: env_common.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -1402,7 +1402,7 @@ exports.o: exports.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -1445,7 +1445,7 @@ flash.o: flash.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -1485,7 +1485,7 @@ image.o: image.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -1525,7 +1525,7 @@ image.o: image.c \
 main.o: main.c /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -1566,14 +1566,14 @@ main.o: main.c /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
 memsize.o: memsize.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h
 s_record.o: s_record.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \
@@ -1613,7 +1613,7 @@ s_record.o: s_record.c \
 stdio.o: stdio.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
@@ -1659,7 +1659,7 @@ xyzModem.o: xyzModem.c \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/common.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_defaults.h \
- /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_android.h \
+ /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/configs/itop_4412_ubuntu.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/config_cmd_default.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/asm/config.h \
  /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/include/linux/bitops.h \

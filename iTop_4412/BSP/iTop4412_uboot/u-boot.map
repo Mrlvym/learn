@@ -1109,7 +1109,7 @@ Linker script and memory map
  .v4_bx         0x00000000        0x0 linker stubs
                 0xc3e27a70                . = ALIGN (0x4)
 
-.rodata         0xc3e27a70     0xcb66
+.rodata         0xc3e27a70     0xcb45
  *(SORT(.rodata*))
  .rodata        0xc3e27a70       0x14 common/ace_sha1.o
                 0xc3e27a70                sha1_digest_emptymsg
@@ -1252,63 +1252,63 @@ Linker script and memory map
                 0xc3e329ed       0xe3 common/libcommon.a(xyzModem.o)
                                  0xe5 (size before relaxing)
  .rodata.str1.1
-                0xc3e32ad0      0x15a board/samsung/smdkc210/libsmdkc210.a(smdkc210.o)
-                                0x193 (size before relaxing)
+                0xc3e32ad0      0x139 board/samsung/smdkc210/libsmdkc210.a(smdkc210.o)
+                                0x172 (size before relaxing)
  .rodata.str1.1
-                0xc3e32c2a       0x11 lib_generic/libgeneric.a(display_options.o)
+                0xc3e32c09       0x11 lib_generic/libgeneric.a(display_options.o)
                                  0x36 (size before relaxing)
  .rodata.str1.1
-                0xc3e32c3b       0x85 lib_generic/libgeneric.a(gunzip.o)
+                0xc3e32c1a       0x85 lib_generic/libgeneric.a(gunzip.o)
  .rodata.str1.1
-                0xc3e32cc0        0xe lib_generic/libgeneric.a(vsprintf.o)
+                0xc3e32c9f        0xe lib_generic/libgeneric.a(vsprintf.o)
  .rodata.str1.1
-                0xc3e32cce      0x21c lib_generic/libgeneric.a(zlib.o)
+                0xc3e32cad      0x21c lib_generic/libgeneric.a(zlib.o)
                                 0x21d (size before relaxing)
  .rodata.str1.1
-                0xc3e32eea        0xd cpu/arm_cortexa9/libarm_cortexa9.a(cpu.o)
+                0xc3e32ec9        0xd cpu/arm_cortexa9/libarm_cortexa9.a(cpu.o)
  .rodata.str1.1
-                0xc3e32ef7      0x145 cpu/arm_cortexa9/s5pc210/libs5pc210.a(usbd-otg-hs.o)
+                0xc3e32ed6      0x145 cpu/arm_cortexa9/s5pc210/libs5pc210.a(usbd-otg-hs.o)
                                 0x14a (size before relaxing)
  .rodata.str1.1
-                0xc3e3303c      0x183 cpu/arm_cortexa9/s5pc210/libs5pc210.a(cpu_info.o)
+                0xc3e3301b      0x183 cpu/arm_cortexa9/s5pc210/libs5pc210.a(cpu_info.o)
  .rodata.str1.1
-                0xc3e331bf       0x6f cpu/arm_cortexa9/s5pc210/libs5pc210.a(fastboot.o)
+                0xc3e3319e       0x6f cpu/arm_cortexa9/s5pc210/libs5pc210.a(fastboot.o)
                                 0x181 (size before relaxing)
  .rodata.str1.1
-                0xc3e3322e       0x84 cpu/arm_cortexa9/s5pc210/libs5pc210.a(pmic.o)
+                0xc3e3320d       0x84 cpu/arm_cortexa9/s5pc210/libs5pc210.a(pmic.o)
  .rodata.str1.1
-                0xc3e332b2       0x37 cpu/arm_cortexa9/s5pc210/libs5pc210.a(gpio.o)
+                0xc3e33291       0x37 cpu/arm_cortexa9/s5pc210/libs5pc210.a(gpio.o)
  .rodata.str1.1
-                0xc3e332e9       0xe6 cpu/arm_cortexa9/s5pc210/libs5pc210.a(i2c.o)
+                0xc3e332c8       0xe6 cpu/arm_cortexa9/s5pc210/libs5pc210.a(i2c.o)
  .rodata.str1.1
-                0xc3e333cf       0x17 cpu/arm_cortexa9/s5pc210/libs5pc210.a(setup_hsmmc.o)
+                0xc3e333ae       0x17 cpu/arm_cortexa9/s5pc210/libs5pc210.a(setup_hsmmc.o)
  .rodata.str1.1
-                0xc3e333e6       0xf1 cpu/arm_cortexa9/s5pc210/libs5pc210.a(recovery.o)
+                0xc3e333c5       0xf1 cpu/arm_cortexa9/s5pc210/libs5pc210.a(recovery.o)
                                 0x121 (size before relaxing)
  .rodata.str1.1
-                0xc3e334d7       0x5a lib_arm/libarm.a(bootm.o)
+                0xc3e334b6       0x5a lib_arm/libarm.a(bootm.o)
                                  0x63 (size before relaxing)
  .rodata.str1.1
-                0xc3e33531      0x3fd fs/fat/libfat.a(fat.o)
+                0xc3e33510      0x3fd fs/fat/libfat.a(fat.o)
                                 0x402 (size before relaxing)
  .rodata.str1.1
-                0xc3e3392e      0x4f6 fs/ext2/libext2fs.a(ext2fs.o)
+                0xc3e3390d      0x4f6 fs/ext2/libext2fs.a(ext2fs.o)
                                 0x579 (size before relaxing)
  .rodata.str1.1
-                0xc3e33e24       0xdc fs/ext2/libext2fs.a(dev.o)
+                0xc3e33e03       0xdc fs/ext2/libext2fs.a(dev.o)
  .rodata.str1.1
-                0xc3e33f00      0x1b4 disk/libdisk.a(part.o)
+                0xc3e33edf      0x1b4 disk/libdisk.a(part.o)
                                 0x1e0 (size before relaxing)
  .rodata.str1.1
-                0xc3e340b4       0xe5 disk/libdisk.a(part_dos.o)
+                0xc3e34093       0xe5 disk/libdisk.a(part_dos.o)
                                  0xf1 (size before relaxing)
  .rodata.str1.1
-                0xc3e34199       0xfd drivers/mmc/libmmc.a(s3c_hsmmc.o)
+                0xc3e34178       0xfd drivers/mmc/libmmc.a(s3c_hsmmc.o)
  .rodata.str1.1
-                0xc3e34296      0x325 drivers/mmc/libmmc.a(s5p_mshc.o)
+                0xc3e34275      0x325 drivers/mmc/libmmc.a(s5p_mshc.o)
                                 0x347 (size before relaxing)
  .rodata.str1.1
-                0xc3e345bb       0x1b /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/lib_arm/eabi_compat.o
+                0xc3e3459a       0x1b /work/lv_mm/iTop_4412/BSP/iTop4412_uboot/lib_arm/eabi_compat.o
 
 .mmudata        0xc3e38000     0x4000
  .mmudata       0xc3e38000     0x4000 board/samsung/smdkc210/lowlevel_init.o

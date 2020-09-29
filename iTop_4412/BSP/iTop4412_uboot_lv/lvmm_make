@@ -1,0 +1,10 @@
+#！/bin/bash
+
+
+#
+#this file is a make for uboot with linux shell
+#
+
+make distclean
+
+./build_uboot.sh SCP_1GDDR_Ubuntu

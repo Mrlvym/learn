@@ -20,6 +20,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 # MA 02111-1307 USA
 #
+
 VERSION = 2010
 PATCHLEVEL = 03
 SUBLEVEL =
@@ -162,7 +163,10 @@ ifeq ($(ARCH),arm)
 #CROSS_COMPILE = /usr/local/arm/4.2.2-eabi/usr/bin/arm-linux-
 #CROSS_COMPILE = /opt/toolchains/arm-2009q3/bin/arm-none-linux-gnueabi-
 #CROSS_COMPILE = /usr/local/arm/arm-2009q3/bin/arm-none-linux-gnueabi-
+
+
 CROSS_COMPILE = /work/tools/arm-2009q3/bin/arm-none-linux-gnueabi-
+
 endif
 ifeq ($(ARCH),i386)
 CROSS_COMPILE = i386-linux-
