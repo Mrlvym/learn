@@ -1,0 +1,103 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.36.0.0
+Copyright (C) 2021 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: 111 MC04, 11, LIC=FYKYW-Q9US3-2ZHW4-FY051-QP61V-WNZ1T
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.36.0.0
+Toolchain Path:  D:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 7 (build 960)
+Assembler:       Armasm.exe V5.06 update 7 (build 960)
+Linker/Locator:  ArmLink.exe V5.06 update 7 (build 960)
+Library Manager: ArmAr.exe V5.06 update 7 (build 960)
+Hex Converter:   FromElf.exe V5.06 update 7 (build 960)
+CPU DLL:         SARMCM3.DLL V5.36.0.0
+Dialog DLL:      DCM.DLL V1.17.3.0
+Target DLL:      Segger\JL2CM3.dll V2.99.40.0
+Dialog DLL:      TCM.DLL V1.53.0.0
+ 
+<h2>Project:</h2>
+E:\lv_mm\work\usb_stm32f407\usb_stm32f407_hid_keyboard\USER\usb_stm32f407_hid_keyboard.uvprojx
+Project File Date:  12/18/2023
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'usb_stm32f407_hid_mouse'
+compiling usb_dcd.c...
+..\USB_Driver\inc\usb_core.h(33): error:  #5: cannot open source input file "usb_conf.h": No such file or directory
+  #include "usb_conf.h"
+..\USB_Driver\src\usb_dcd.c: 0 warnings, 1 error
+compiling usbd_core.c...
+..\USB_Driver\inc\usb_core.h(33): error:  #5: cannot open source input file "usb_conf.h": No such file or directory
+  #include "usb_conf.h"
+..\USB_Device\Core\src\usbd_core.c: 0 warnings, 1 error
+compiling usbd_ioreq.c...
+..\USB_Device\Core\inc\usbd_def.h(34): error:  #5: cannot open source input file "usbd_conf.h": No such file or directory
+  #include "usbd_conf.h"
+..\USB_Device\Core\src\usbd_ioreq.c: 0 warnings, 1 error
+compiling usb_dcd_int.c...
+..\USB_Driver\inc\usb_core.h(33): error:  #5: cannot open source input file "usb_conf.h": No such file or directory
+  #include "usb_conf.h"
+..\USB_Driver\src\usb_dcd_int.c: 0 warnings, 1 error
+compiling usb_core.c...
+..\USB_Driver\inc\usb_core.h(33): error:  #5: cannot open source input file "usb_conf.h": No such file or directory
+  #include "usb_conf.h"
+..\USB_Driver\src\usb_core.c: 0 warnings, 1 error
+compiling usbd_hid_core.c...
+..\USB_Device\Core\inc\usbd_def.h(34): error:  #5: cannot open source input file "usbd_conf.h": No such file or directory
+  #include "usbd_conf.h"
+..\USB_Device\Class\hid\src\usbd_hid_core.c: 0 warnings, 1 error
+compiling usbd_req.c...
+..\USB_Device\Core\inc\usbd_def.h(34): error:  #5: cannot open source input file "usbd_conf.h": No such file or directory
+  #include "usbd_conf.h"
+..\USB_Device\Core\src\usbd_req.c: 0 warnings, 1 error
+compiling usb_bsp.c...
+..\USB_Hid_KeyBoard\src\usb_bsp.c(30): error:  #5: cannot open source input file "usb_bsp.h": No such file or directory
+  #include "usb_bsp.h"
+..\USB_Hid_KeyBoard\src\usb_bsp.c: 0 warnings, 1 error
+compiling usbd_hid_keyboard.c...
+..\USB_Hid_KeyBoard\src\usbd_hid_keyboard.c(1): error:  #5: cannot open source input file "usbd_hid_keyboard.h": No such file or directory
+  #include "usbd_hid_keyboard.h"
+..\USB_Hid_KeyBoard\src\usbd_hid_keyboard.c: 0 warnings, 1 error
+compiling usbd_desc.c...
+..\USB_Driver\inc\usb_core.h(33): error:  #5: cannot open source input file "usb_conf.h": No such file or directory
+  #include "usb_conf.h"
+..\USB_Hid_KeyBoard\src\usbd_desc.c: 0 warnings, 1 error
+compiling usbd_usr.c...
+..\USB_Hid_KeyBoard\src\usbd_usr.c(29): error:  #5: cannot open source input file "usbd_usr.h": No such file or directory
+  #include "usbd_usr.h"
+..\USB_Hid_KeyBoard\src\usbd_usr.c: 0 warnings, 1 error
+compiling stm32f4xx_it.c...
+..\USB_Driver\inc\usb_core.h(33): error:  #5: cannot open source input file "usb_conf.h": No such file or directory
+  #include "usb_conf.h"
+stm32f4xx_it.c: 0 warnings, 1 error
+compiling key.c...
+..\HARDWARE\KEY\key.c(6): error:  #5: cannot open source input file "usbd_hid_mouse.h": No such file or directory
+  #include "usbd_hid_mouse.h"
+..\HARDWARE\KEY\key.c: 0 warnings, 1 error
+compiling main.c...
+main.c(7): error:  #5: cannot open source input file "usbd_usr.h": No such file or directory
+  #include "usbd_usr.h"
+main.c: 0 warnings, 1 error
+"..\OBJ\usb_stm32f407_hid_mouse.axf" - 14 Error(s), 0 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32F4xx_DFP.2.16.0.pack
+                Keil.STM32F4xx_DFP.2.16.0
+                STMicroelectronics STM32F4 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  D:\Keil_v5\Packs\Keil\STM32F4xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
+
+<h2>Collection of Component Files used:</h2>
+Target not created.
+Build Time Elapsed:  00:00:01
+</pre>
+</body>
+</html>
