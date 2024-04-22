@@ -74,5 +74,3 @@ git reset --hard ddcc34f02cbc8e89adb37ffdf2deb515cd9576ec（恢复到指定的�
 git push -f origin master（强制推送到远程仓库）
 
 456
-
-345
