@@ -73,4 +73,3 @@ git log（查看提交日志）
 git reset --hard ddcc34f02cbc8e89adb37ffdf2deb515cd9576ec（恢复到指定的版本）
 git push -f origin master（强制推送到远程仓库）
 
-456
