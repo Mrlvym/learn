@@ -1,0 +1,157 @@
+uboot的命令体系
+
+1,uboot的命令体系基础
+（1）使用uboot命令
+	这个就是在uboot启动过程中，在bootdelay倒计时结束之前按下任意键进入uboot的命令行模式，然后可以在命令行下输入一些命令。
+（2）uboot命令体系实现代码在哪里
+	uboot命令体系的实现代码在uboot/common/cmd_xxx.c中。有若干个.c文件和命令体系有关系。（还有command.c  main.c也和命令
+	体系有关）
+（3）每个命令对应的其实都是一个函数
+	每个uboot的命令背后对应着一个函数。这就是uboot实现命令体系的一种思路和方法。
+（4）命令参数以args和argv的方式传递给函数
+	有些带参数的命令的参数是通过argc和argv这两个参数的方式传递给命令函数的。
+	
+2，uboot命令解析和执行过程分析
+	（1）main_loop函数
+		1）uboot启动的第二阶段末尾，有一个main_loop函数，这个函数就是用来获取命令，解析命令，执行命令的过程。
+		2）run_command函数就是用来执行命令的函数，接下来详细分析run_command函数.
+	（2）run_command函数详解
+		关键点分析：
+			1）控制台命令获取
+				strcpy (lastcommand, console_buffer);
+				rc = run_command (lastcommand, flag);
+			2）命令解析
+				argc = parse_line (finaltoken, argv)，这个函数能够将"md 30000000 10"这条命令解析成argc = 3，argv[0] = md,
+				argv[1] = 30000000, argv[2] = 10;
+			3）命令集中查找命令
+				cmdtp = find_cmd(argv[0])函数去uboot的命令集合中去搜索是否有argv[0]这个命令
+				cmdtp结构体
+					struct cmd_tbl_s {
+						char		*name;		/* Command Name			*/
+						int		maxargs;	/* maximum number of arguments	*/
+						int		repeatable;	/* autorepeat allowed?		*/
+										/* Implementation function	*/
+						int		(*cmd)(struct cmd_tbl_s *, int, int, char *[]);
+						char		*usage;		/* Usage message	(short)	*/
+					#ifdef	CONFIG_SYS_LONGHELP
+						char		*help;		/* Help  message	(long)	*/
+					#endif
+					#ifdef CONFIG_AUTO_COMPLETE
+						/* do auto completion on the arguments */
+						int		(*complete)(int argc, char *argv[], char last_char, int maxv, char *cmdv[]);
+					#endif
+					};
+			4）执行命令
+				(cmdtp->cmd) (cmdtp, flag, argc, argv)最后以函数指针的方式来执行这个命令。
+		
+		思考：关键点在于find_cmd函数如何查找到这命令是不是uboot的合法命令？如何这取决于uboot的命令体系机制（uboot如何完成
+			   命令的这一套设计的，命令是如何去注册、存储、管理、索引的）。
+
+3，uboot如何处理命令集1
+	（1）可能的管理方式
+		1）数组：管理的命令数是固定的，不能够任意添加
+		2）链表：增删改查复杂，执行的效率低
+		3）uboot采用了一种类数组的一种高效率方式管理命令集
+	（2）命令结构体cmd_tbl_t
+		struct cmd_tbl_s {
+			char		*name;		/* Command Name			*/
+			int		maxargs;	/* maximum number of arguments	*/
+			int		repeatable;	/* autorepeat allowed?		*/
+							/* Implementation function	*/
+			int		(*cmd)(struct cmd_tbl_s *, int, int, char *[]);
+			char		*usage;		/* Usage message	(short)	*/
+		#ifdef	CONFIG_SYS_LONGHELP
+			char		*help;		/* Help  message	(long)	*/
+		#endif
+		#ifdef CONFIG_AUTO_COMPLETE
+			/* do auto completion on the arguments */
+			int		(*complete)(int argc, char *argv[], char last_char, int maxv, char *cmdv[]);
+		#endif
+		};
+		name：命令的名称
+		maxargs：这条命令函数能够传递的最大参数个数
+		repeatable：是否支持按下回车执行上一条命令这种机制
+		cmd：命令执行的函数指针，通过这个函数指针来执行命令
+		usage：命令的短使用说明
+		help：命令的长使用说明
+		complete：这个是uboot命令行是否支持table键自动补全命令的机制
+		
+		总结：uboot的命令体系在工作时，一个命令对应一个cmd_tbl_t结构体的一个实例，uboot支持多少个命令，就需要多少个结构体
+			实例。uboot的命令体系吧这些结构体管理起来，当用户输入一个命令时，uboot会去这些结构体实例中去查找（查找方法和
+			存储管理方法有关）。如果找到了则执行命令，没有找到则打印无这条命令的提示信息。
+		
+	（3）uboot实现命令管理的思路
+		1）填充1个结构体实例构成一个命令
+		2）给命令结构体实例附加特定的段属性（就是链接脚本中的.u_boot_cmd段），链接脚本在链接时会将这些带有该属性的内容链在
+		   一起排列（排列顺序可能不是固定的，但是没一条命令的结构体都会被排列到这个指定的段内）
+		3）uboot重定位时将该段整体加载到DDR中。加载到DDR中的uboot镜像中带有特定段属性的这一段其实就是uboot命令结构体的集合
+		   ，有点像一个命令结构体数组。
+		4）段起始地址（__u_boot_cmd_start）和段结束地址（__u_boot_cmd_end）（都在连接脚本文件中），决定了这些命令集的开始
+		   和结束地址。
+	
+3，uboot如何处理命令集2
+	（1）uboot命令定义具体实现分析
+		1）U_BOOT_CMD宏基本分析
+		#define U_BOOT_CMD(name,maxargs,rep,cmd,usage,help) \
+		cmd_tbl_t __u_boot_cmd_##name __attribute__ ((unused,section (".u_boot_cmd"))) = {#name, maxargs, rep, cmd, usage}
+	
+		U_BOOT_CMD(
+			version,   1,  1,  do_version,
+			"version - print monitor version\n",
+			NULL
+		);
+		这个宏替换根据上面的定义替换后是
+		cmd_tbl_t __u_boot_cmd_version __attribute__ ((unused,section (".u_boot_cmd"))) = {"version", 1, 1, 
+		do_version, "version - print monitor version\n"}
+		
+	总结：这个U_BOOT_CMD宏的理解，关键在于结构体变量的名字和段属性。名字使用##作为连接符，附加了用户自定义段属性，以保证
+		  链接时将这些命令的集合，链接到指定的段内（.u_boot_cmd）。
+	
+		2）链接脚本
+		
+	（2）find_cmd函数详解
+		1）find_cmd函数的任务是从当前uboot的命令集中查看是否有某个命令。
+			for循环来遍历这个命令集合，查找是否有我们命令行输入的函数
+			for (cmdtp = __u_boot_cmd_start;
+				 cmdtp != __u_boot_cmd_end;
+				 cmdtp++) {
+				if (strncmp (cmd, cmdtp->name, len) == 0) {
+					if (len == strlen (cmdtp->name))
+						return cmdtp;	/* full match */
+
+					cmdtp_temp = cmdtp;	/* abbreviated command ? */  
+					n_found++;
+				}
+			}
+	（3）U_BOOT_CMD宏详解
+		这个宏定义其实就是定义了一个命令对应的结构体变量，这个变量名和宏的第一个参数有关，因此只要宏调用时传参的第一个参数
+		不同则定义的结构体变量不会重名。
+
+4，uboot中增加自己定义的命令
+	（1）在已有的c文件中直接添加命令
+		1）在uboot/common/command.c文件中直接用U_BOOT_CMD宏即可添加命令，给命令一个实现提do_xxx即可。
+		2）添加了之后重新编译uboot源码，然后烧录到SD卡启动，通过help命令就可以看到自己添加的命令了。
+		3）我们还可以在函数中使用argc和argv这两个变量来验证传参。
+	（2）自己新建c文件添加命令
+		1）在uboot/common/文件夹下新建一个自己命令的.c文件（例如my_cmd.c），将你要添加的命令相关的代码写入到这个.c文件中
+		   ，这时要注意头文件的包含（一般需要包含common.h和command.h这两个头文件）。
+		2）在当前目录的的Makefile中的obj -y +=  my_cmd.o，让uboot源码在编译的时候将新添加的.c文件编译到整个工程中去。
+		3）然后重新编译uboot的源码，烧录到SD卡启动就可以看到我们新添加的命令了。
+		4）我们还可以在函数中使用argc和argv这两个变量来验证传参。
+	（3）体会uboot命令体系的优点
+		1）uboot的命令体系稍微复杂了一些，但是他写好之后就不用动了。我们后面再移植uboot的时候也不会去动uboot的命令体系。
+		   我们最多就是向uboot中去添加命令。
+		2）这样看来向uboot的命令体系中去添加命令还是很简单的。
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		

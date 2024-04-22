@@ -1,0 +1,167 @@
+#!/bin/sh -e
+
+# Script to create header files and links to configure
+# U-Boot for a specific board.
+#
+# Parameters:  Target  Architecture  CPU  Board [VENDOR] [SOC]
+#
+# (C) 2002-2006 DENX Software Engineering, Wolfgang Denk <wd@denx.de>
+#
+
+APPEND=no	# Default: Create new config file
+#BOARD_NAME=""	# Name to print in make output
+TARGETS=""
+
+echo "CoreBoard  is $7...... "
+
+if   [ "$7" = "SCP_1GDDR" ]  ||   [ "$7" = "SCP_2GDDR" ] || [ "$7" = "POP_1GDDR" ]  ||   [ "$7" = "POP_2GDDR" ]
+then 
+      BOARD_NAME="itop_4412_android"
+      echo "CoreBoard OS is android or linux...... "
+
+elif [ "$7" = "SCP_1GDDR_Ubuntu" ]  ||  [ "$7" = "SCP_2GDDR_Ubuntu" ] || [ "$7" = "POP_1GDDR_Ubuntu" ] ||  [ "$7" = "POP_2GDDR_Ubuntu" ]
+then
+      BOARD_NAME="itop_4412_ubuntu"
+      echo "CoreBoard OS is Ubuntu...... "
+else
+      echo "unknown coreboard type and os type......"
+fi
+
+#判断$1是否有以下匹配选项（此时的$1=smdkc210跟一下没有匹配，因此直接退出while循环）	
+while [ $# -gt 0 ] ; do
+	case "$1" in
+	--) shift ; break ;;
+	-a) shift ; APPEND=yes ;;
+#	-n) shift ; BOARD_NAME="${1%%_config}" ; shift ;;
+	-t) shift ; TARGETS="`echo $1 | sed 's:_: :g'` ${TARGETS}" ; shift ;;
+	*)  break ;;
+	esac
+done
+
+#此处为判断BOARD_NAME变量是否赋值，如果没有赋值就将$1赋值给BOARD_NAME（此时BOARD_NAME=$1）
+[ "${BOARD_NAME}" ] || BOARD_NAME="$1"
+
+#如果mkconfig的参数小于4个或者大于7个则mkconfig配置文件直接返回1
+[ $# -lt 4 ] && exit 1
+[ $# -gt 7 ] && exit 1
+
+#如果ARCH变量存在，并且ARCH的值和$2不相同则mkconfig报错返回
+if [ "${ARCH}" -a "${ARCH}" != "$2" ]; then
+	echo "Failed: \$ARCH=${ARCH}, should be '$2' for ${BOARD_NAME}" 1>&2
+	exit 1
+fi
+#在执行了make smdkc210_config之后打印打印smdkc210配置成功信息
+echo "Configuring for ${BOARD_NAME} board..."
+
+#
+# Create link to architecture specific headers
+#
+#接下来会创建一堆的符号链接。为什么要创建符号链接呢？这些符号链接文件的存在就是整个配置过程的核心，这些符号链接文件
+#（文件夹）的主要作用是给头文件包含等过程提供了只想性链接。根本目的是让uboot具有可移植性。
+#uboot可移植性实现原理：在uboot中有很多彼此之间平行的代码，各自属于各自不同的架构/CPU/开发板，我们在具体到某一个开发板
+#的编译时用符号链接的方式提供一个具体的名字的文件夹供编译时使用。这样就可以在配置的过程中通过不同的配置使用不同的文件，
+#就可以正确的包含需要编译的文件。
+
+#判断SRCTREE和OBJTREE文件夹是否一样（一样代表本地编译，不一样代表是指定输出文件夹编译）
+if [ "$SRCTREE" != "$OBJTREE" ] ; then
+	mkdir -p ${OBJTREE}/include
+	mkdir -p ${OBJTREE}/include2
+	cd ${OBJTREE}/include2
+	rm -f asm
+	ln -s ${SRCTREE}/include/asm-$2 asm
+	LNPREFIX="../../include2/asm/"
+	cd ../include
+	rm -rf asm-$2
+	rm -f asm
+	mkdir asm-$2
+	ln -s asm-$2 asm
+else
+	cd ./include		#进入include文件夹下
+	rm -f asm			#先删除asm文件，为了防止已经有了asm文件
+	ln -s asm-$2 asm	#创建一个asm链接文件 指向asm-$2文件夹
+fi
+
+#删除asm-$2/arch文件
+rm -f asm-$2/arch
+
+#判断$6文件是否存在来创建arch链接文件
+if [ -z "$6" -o "$6" = "NULL" ] ; then
+	ln -s ${LNPREFIX}arch-$3 asm-$2/arch	#在asm-$2文件夹下创建一个arch链接文件指向${LNPREFIX}arch-$3文件夹
+else
+	ln -s ${LNPREFIX}arch-$6 asm-$2/arch	#在asm-$2文件夹下创建一个arch链接文件指向${LNPREFIX}arch-$6文件夹
+fi
+
+#判断$2是否和arm相同来创建proc链接文件
+if [ "$2" = "arm" ] ; then
+	rm -f asm-$2/proc							#先删除proc文件，防止已经存在了proc文件
+	ln -s ${LNPREFIX}proc-armv asm-$2/proc		#在asm-$2文件夹下创建proc链接文件指向${LNPREFIX}proc-armv文件夹
+fi
+
+#
+# Create include file for Make
+#
+
+#创建config.mk文件，往里面填充ARCH、CPU、BOARD、VENDOR、SOC几个变量
+echo "ARCH   = $2" >  config.mk
+echo "CPU    = $3" >> config.mk
+echo "BOARD  = $4" >> config.mk
+
+[ "$5" ] && [ "$5" != "NULL" ] && echo "VENDOR = $5" >> config.mk
+
+[ "$6" ] && [ "$6" != "NULL" ] && echo "SOC    = $6" >> config.mk
+
+# Assign board directory to BOARDIR variable
+if [ -z "$5" -o "$5" = "NULL" ] ; then
+    BOARDDIR=$4
+else
+    BOARDDIR=$5/$4
+fi
+
+
+
+#add by dg for kinds of coreboard
+if   [ "$7" = "SCP_1GDDR" ] ||   [ "$7" = "SCP_2GDDR" ] || [ "$7" = "SCP_1GDDR_Ubuntu" ] ||   [ "$7" = "SCP_2GDDR_Ubuntu" ]
+then 
+     echo "CORE   =  SCP" >> config.mk
+     ln -sf ${SRCTREE}/board/samsung/smdkc210/lowlevel_init_SCP.S  ${SRCTREE}/board/samsung/smdkc210/lowlevel_init.S	
+     ln -sf ${SRCTREE}/cpu/arm_cortexa9/s5pc210/cpu_init_SCP.S     ${SRCTREE}/cpu/arm_cortexa9/s5pc210/cpu_init.S
+
+elif [ "$7" = "POP_1GDDR" ]  ||  [ "$7" = "POP_2GDDR" ] || [ "$7" = "POP_1GDDR_Ubuntu" ] ||  [ "$7" = "POP_2GDDR_Ubuntu" ]
+then
+     echo "CORE   =  POP" >>  config.mk
+     ln -sf ${SRCTREE}/board/samsung/smdkc210/lowlevel_init_POP.S  ${SRCTREE}/board/samsung/smdkc210/lowlevel_init.S	
+     ln -sf ${SRCTREE}/cpu/arm_cortexa9/s5pc210/cpu_init_POP.S     ${SRCTREE}/cpu/arm_cortexa9/s5pc210/cpu_init.S
+else
+      echo "make config error,please use correct params......"
+      exit 0
+fi
+
+
+#
+# Create board specific header file
+#
+if [ "$APPEND" = "yes" ]	# Append to existing config file
+then
+	echo >> config.h
+else
+	> config.h		# Create new config file
+fi
+echo "/* Automatically generated - do not edit */" >>config.h
+echo "#includ <configs/$1.h>" >>config.h
+
+for i in ${TARGETS} ; do
+	echo "#define CONFIG_MK_${i} 1" >>config.h ;
+done
+
+#add by dg for all itop4412 type boards
+
+[ "$7" ] && [ "$7" != "NULL" ] && echo "#define CONFIG_$7" >> config.h
+
+cat << EOF >> config.h
+#define CONFIG_BOARDDIR board/$BOARDDIR
+#include <config_defaults.h>
+#include <configs/$BOARD_NAME.h>
+#include <asm/config.h>
+EOF
+
+exit 0

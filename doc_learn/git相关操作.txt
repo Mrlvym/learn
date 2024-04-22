@@ -1,0 +1,75 @@
+//设置账户(需要和github账户设置一致)
+git config --global user.name Mrlvym
+git config --global user.email 1561631004@qq.com
+
+//查看设置
+git config --list
+user.name=Mrlvym
+user.email=1561631004@qq.com
+
+//生成ssh的秘钥在 /home/langgy/.ssh/id_rsa.pub
+ssh-keygen -t rsa -C "1561631004@qq.com"（使用前要确保ssh程序安装了）
+
+//进入上述文件夹复制id_rsa.pub中的内容复制到github官网的指定位置进行秘钥设置
+cd /home/langgy/.ssh/
+cat id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCmAd6tErkLpaHZ/YgPhAf1KTvntRU1iuKlqlGnoU9CVNYJozlpwjRDyJAz+05MpqAxnjDkQMIEPa+Um6kEVPql0DSdad/uWBtWwAzqWyiiOxSm3zfNDXTDioc1rWAw+S6CyuvVjc53rfxZzsVMD6e48Uh3hX1YGr3FsX/gx49IsfYeap94wfHyvdDACcqb+/EzU4SXPwXG251EuRq9Bphztvn/LjecVZtCjZudN3zaqKjKRdUtQCEdY3f8W6eIiKt+67Cub50tIsQdsOARZa5FvDidq8cLWYKu93mFoo/J2YG7hJSDHrRquHsIa/5/aRkhCO7AIqFxaAxQLZyILQ51 1561631004@qq.com
+将上述内容进行复制粘贴（直接用vim打开可能复制不了）
+
+//初始化git本地仓库（会在当前目录下生成.git文件夹）
+git init
+
+//将本地仓库与远程仓库进行关联（origin名很重要）
+git remote add origin git@github.com:Mrlvym/learn.git
+
+//将本地仓库和远程仓库合并
+git pull --rebase origin master
+
+//从远程仓库克隆代码到本地仓库
+git clone git@github.com:Mrlvym/learn.git:/learn（远程仓库路径）  /home/lv_mm/learn（本地仓库路径，不选代表默认当前目录）
+
+//将本地仓库更新到远程仓库（-u第一次提交的时候用）
+git push -u origin master
+
+//从远程仓库pull文件（dev代表从哪个分支）
+git pull origin dev
+相当于执行了下面两条命令
+git fetch（将本地仓库的内容更新到远程仓库）
+git merge origin/dev
+
+//往暂存区添加learn文件夹里的文件
+git add learn
+
+//将add添加的文件提交到本地仓库
+git commt -m "提示信息"
+git commt -a
+
+//查看当前仓库的文件状态
+git status
+
+//查看git提交信息
+git log
+
+//查看test.c更改的相关信息
+git diff test.c
+
+//查看当前git的分支状态
+git branch
+
+//切换分支
+git checkout master
+
+//新建并切换到新的分支dev
+git checkout -b dev
+
+//删除分支dev
+git checkout -d dev
+
+//主分支从其他分支合并文件
+git merge origin/dev
+
+//恢复当仓库到指定的版本
+git log（查看提交日志）
+git reset --hard ddcc34f02cbc8e89adb37ffdf2deb515cd9576ec（恢复到指定的版本）
+git push -f origin master（强制推送到远程仓库）
+
