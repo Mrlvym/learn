@@ -62,7 +62,7 @@ git checkout master
 //新建并切换到新的分支dev
 git checkout -b dev
 
-//删除分支dev456
+//删除分支dev
 git checkout -d dev
 
 //主分支从其他分支合并文件
