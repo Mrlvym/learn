@@ -92,6 +92,7 @@ git merge feature-branch
 
 //撤销合并分支
 git merge --abort
+git revert <commit_hash>
 
 //撤销push 的 commit
 git revert <commit_hash>
