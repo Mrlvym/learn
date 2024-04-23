@@ -73,6 +73,30 @@ git log（查看提交日志）
 git reset --hard ddcc34f02cbc8e89adb37ffdf2deb515cd9576ec（恢复到指定的版本）
 git push -f origin master（强制推送到远程仓库）
 
-456
+//只撤销 git commit
+git reset --soft HEAD^
 
-123
+//撤销 git commit ，撤销 git add ，不恢复文件修改
+git reset HEAD^
+
+//撤销 git commit ，撤销 git add ，恢复文件修改
+git reset --hard HEAD^
+
+//反向撤销 git commit
+git reflog //产看log
+git git reset --hard HEAD^
+
+//合并分支
+git checkout master
+git merge feature-branch
+
+//撤销合并分支
+git merge --abort
+
+//撤销push 的 commit
+git revert <commit_hash>
+git push origin <branch_name>
+
+//删除远程分支
+git push <远程仓库名> --delete <分支名>
+git push origin --delete feature
